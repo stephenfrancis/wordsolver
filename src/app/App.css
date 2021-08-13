@@ -1,0 +1,15 @@
+body {
+  margin: 0 auto;
+  align-items: center;
+}
+
+body > div {
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
