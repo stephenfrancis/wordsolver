@@ -1,6 +1,9 @@
 body {
+  max-width: 1200px;
+  height: 100vh;
   margin: 0 auto;
   align-items: center;
+  font-family: Lato, Arial, sans-serif;
 }
 
 body > div {

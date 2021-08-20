@@ -6,11 +6,12 @@
     "yarn": "^1.22"
   },
   "scripts": {
-    "clean": "rm -f -r .cache dist/*",
+    "build": "yarn content && NODE_ENV=production ./node_modules/.bin/ts-node src/config/fuse.ts",
+    "clean": "rm -f -r dist/*",
     "content": "cp src/wordlist/2of4brif.txt dist",
+    "deploy": "firebase deploy",
     "start": "yarn content && NODE_ENV=development ./node_modules/.bin/ts-node src/config/fuse.ts",
-    "test": "jest",
-    "web": "heroku local web"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
