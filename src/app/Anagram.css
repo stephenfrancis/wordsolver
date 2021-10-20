@@ -14,3 +14,17 @@
   margin: 1px;
   background-color: #eee;
 }
+
+.showParamFields {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.showParamFields > div {
+  margin: 0 10px;
+}
+
+.showParamFields input {
+  width: 100px;
+}

@@ -1,6 +1,6 @@
 export class Node {
   private readonly letter: string;
-  private prev: Node;
+  private prev?: Node;
   private next: Record<string, Node>;
   private count: number;
   private level: number;
@@ -31,7 +31,7 @@ export class Node {
     }
   }
 
-  getWord(suffix?: string) {
+  getWord(suffix?: string): string {
     if (!suffix) {
       suffix = "";
     }
@@ -67,21 +67,22 @@ export class Node {
     remainder: string,
     results: string[],
     prefix: string,
-    prev_word: string,
+    prev_word: string | null,
     root_node: Node,
-    result_limit: number,
-    max_words: number
+    max_results: number,
+    required_words: number
   ) {
     if (typeof prefix !== "string") {
       prefix = "";
     }
-    if (remainder.length === 0) {
+    const curr_word_count = prefix.split(" ").length;
+    if (remainder.length === 0 && curr_word_count === required_words) {
       if (this.ends_word) {
         results.push(prefix + remainder);
       }
     } else if (
-      results.length >= result_limit ||
-      prefix.split(" ").length > max_words
+      results.length >= max_results ||
+      curr_word_count > required_words
     ) {
       return;
     } else {
@@ -92,8 +93,8 @@ export class Node {
           prefix + " ",
           prefix.substr(prefix.lastIndexOf(" ") + 1),
           root_node,
-          result_limit,
-          max_words
+          max_results,
+          required_words
         );
       }
       this.nextNodes((initial, node) => {
@@ -108,11 +109,32 @@ export class Node {
             prefix + initial,
             null,
             root_node,
-            result_limit,
-            max_words
+            max_results,
+            required_words
           );
         }
       });
     }
   }
+}
+
+export function getAnagrams(
+  root_node: Node,
+  max_results: number,
+  max_words: number,
+  letters: string
+) {
+  const results = [];
+  for (let i = 1; i <= max_words && results.length < max_results; i += 1) {
+    root_node.anagrams(
+      letters,
+      results,
+      "",
+      null,
+      root_node,
+      max_results - results.length,
+      i
+    );
+  }
+  return results;
 }

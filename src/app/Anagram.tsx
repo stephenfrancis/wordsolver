@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Node } from "../anagram/Node";
+import { getAnagrams, Node } from "../anagram/Node";
 
 import styles from "./Anagram.css";
 
@@ -10,25 +10,18 @@ interface Props {
 }
 
 const Anagram: React.FC<Props> = (props) => {
+  const [maxResults, setMaxResults] = React.useState<number>(100);
+  const [maxWords, setMaxWords] = React.useState<number>(3);
   const [results, setResults] = React.useState<string[]>([]);
   React.useEffect(() => {
-    const temp = [];
-    console.log(`looking for anagrams of ${props.inputLetters}`);
-    props.rootNode.anagrams(
-      props.inputLetters,
-      temp,
-      "",
-      null,
-      props.rootNode,
-      100,
-      3
-    );
-    console.log(`found ${temp.length}`);
+    const temp = getAnagrams(props.rootNode, maxResults, maxWords, props.inputLetters);
+    console.log(`looking for anagrams of ${props.inputLetters}, found ${temp.length} for max words ${maxWords} and max results ${maxResults}`);
     setResults(temp);
-  }, [props.inputLetters]);
+  }, [props.inputLetters, maxResults, maxWords]);
 
   return (
     <>
+      <ShowParamFields maxResults={maxResults} maxWords={maxWords} onChangeMaxResults={setMaxResults} onChangeMaxWords={setMaxWords} />
       {results.length > 1 && (
         <div className={styles.count}>{results.length} results</div>
       )}
@@ -38,8 +31,33 @@ const Anagram: React.FC<Props> = (props) => {
           <div key={result}>{result}</div>
         ))}
       </div>
+      {results.length === 0 && <div className={styles.count}>no results found</div>}
     </>
   );
 };
+
+interface ShowParamFieldsProps {
+  maxResults: number;
+  maxWords: number;
+  onChangeMaxResults: (newResultLimit: number) => void;
+  onChangeMaxWords: (newMaxWords: number) => void;
+}
+
+const ShowParamFields: React.FC<ShowParamFieldsProps> = (props) => {
+  const onChangeMaxWords = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChangeMaxWords(parseInt(event.target.value, 10));
+  }
+  const onChangeMaxResults = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChangeMaxResults(parseInt(event.target.value, 10));
+  }
+  return (
+    <div className={styles.showParamFields}>
+      <div>max number of results:</div>
+      <div><input type="number" onChange={onChangeMaxResults} value={String(props.maxResults)} /></div>
+      <div>max number of words:</div>
+      <div><input type="number" onChange={onChangeMaxWords} value={String(props.maxWords)} /></div>
+    </div>
+  )
+}
 
 export default Anagram;

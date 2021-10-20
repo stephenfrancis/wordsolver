@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { Node } from "./Node";
+import { getAnagrams, Node } from "./Node";
 
 describe("the anagram function", () => {
   test("basic anagram solving", () => {
@@ -10,8 +10,7 @@ describe("the anagram function", () => {
     words.filter((word) => !!word).forEach((word) => root_node.add(word));
 
     const getSingleAnagram = (letters: string) => {
-      const results = [];
-      root_node.anagrams(letters, results, "", null, root_node, 3, 2);
+      const results = getAnagrams(root_node, 3, 2, letters);
       if (results.length < 1) {
         throw new Error("no anagrams found");
       }
@@ -25,5 +24,16 @@ describe("the anagram function", () => {
     expect(() => {
       getSingleAnagram("xxxx");
     }).toThrowError("no anagrams found");
+
+    expect(getAnagrams(root_node, 10, 4, "rabbit")).toEqual([
+      "rabbit",
+      "art bib",
+      "barb it",
+      "barb ti",
+      "bat rib",
+      "bib rat",
+      "bib tar",
+      "rib tab",
+    ]);
   });
 });
