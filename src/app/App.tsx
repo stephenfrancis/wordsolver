@@ -38,13 +38,13 @@ const App: React.FC<Props> = () => {
   return (
     <div className={styles.main}>
       <h1>WordSolver</h1>
-      <Input onValueChange={setInputLetters} />
+      <Input defaultValue={inputLetters} onValueChange={setInputLetters} />
       <ModeSwitch mode={mode} onValueChange={onModeChange} />
       {mode === "anagram" && (
         <Anagram inputLetters={inputLetters} rootNode={root_node} />
       )}
       {mode === "regex" && (
-        <Regexer inputLetters={inputLetters} words={words} />
+        <Regexer inputLetters={inputLetters} setInputLetters={setInputLetters} words={words} />
       )}
     </div>
   );

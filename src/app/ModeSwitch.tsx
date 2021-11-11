@@ -1,4 +1,5 @@
 import * as React from "react";
+import RadioButton from "./RadioButton";
 
 import styles from "./ModeSwitch.css";
 
@@ -8,29 +9,10 @@ interface Props {
 }
 
 const ModeSwitch: React.FC<Props> = (props) => {
-  const ref = React.useRef<HTMLInputElement>(null);
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (props.onValueChange) {
-      props.onValueChange(event.currentTarget.id as Mode);
-    }
-  };
-  const RadioButton = (id: string, label: string) => (
-    <>
-      <input
-        id={id}
-        name="mode_switch"
-        type="radio"
-        value={id}
-        checked={props.mode === id}
-        onChange={onChange}
-      />
-      <label htmlFor={id}>{label}</label>
-    </>
-  );
   return (
     <fieldset className={styles.main}>
-      {RadioButton("anagram", "Anagram")}
-      {RadioButton("regex", "Regex")}
+      <RadioButton id="anagram" label="Anagram" name="mode_switch" onValueChange={props.onValueChange} value={props.mode} />
+      <RadioButton id="regex"   label="Regex"   name="mode_switch" onValueChange={props.onValueChange} value={props.mode} />
     </fieldset>
   );
 };
